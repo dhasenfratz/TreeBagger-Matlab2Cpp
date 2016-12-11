@@ -258,8 +258,10 @@ for bagi=1:numel(all_bags)
         end
     end
 end
-fprintf(fid,'\n// THESE TWO VARIALBES NEED TO BE COPIED TO THE HEADER FILE DecisionTreeClass.hpp\n');
+fprintf(fid,'\n<-- Remove this line after copying -->\n');
+fprintf(fid,'// THESE TWO VARIALBES NEED TO BE COPIED TO THE HEADER FILE DecisionTreeClass.hpp\n');
 fprintf(fid,'//float test[%i][%i][%i];\n', bags, max(cell2mat(all_branches)), max(cell2mat(all_storeBranchLength)));
 fprintf(fid,'//float result[%i][%i];\n', bags, max(cell2mat(all_branches)));
+fprintf(fid,'<------------------------------------>\n');
 
 fprintf(fid,'\n#endif\n');
