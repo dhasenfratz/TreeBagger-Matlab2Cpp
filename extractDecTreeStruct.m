@@ -1,48 +1,18 @@
-function []=extractDecTreeStruct(b,classesunique,treebag,bags,prefix)
-% 	This function takes a treebagger class, or decision tree class, and outputs a text file with all
-%	The information required to export the treebagger / classification functions
-%   inputs
-%	b : Treebagg class structure, or or classification tree structure
-%	classesunique : list of unique class labels (numerical)
-%	treebag : 0 for classification tree, 1 for treebagger
-%	bags : number of bags
-%	meas	: features - Test that classifier is working with this test
-%	data
-%	species	 : class labels (numeric)- Test that classifier is working with this test
-%	data
-%	prefix : filename prefix for text file output.
-%	uniqueclasses : unique class in order (numeric)
-%	Copyright (c) <2014> <Paul Kendrick>
-
-%	Permission is hereby granted, free of charge, to any person obtaining a copy
-%	of this software and associated documentation files (the "Software"), to deal
-%	in the Software without restriction, including without limitation the rights
-%	to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-%	copies of the Software, and to permit persons to whom the Software is
-%	furnished to do so, subject to the following conditions:
-
-%	The above copyright notice and this permission notice shall be included in
-%	all copies or substantial portions of the Software.
-
-%	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-%	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-%	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-%	AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-%	LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-%	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-%	THE SOFTWARE.
-%	Copyright (c) <2014> <Paul Kendrick>
-
-% /*Permission is hereby granted, free of charge, to any person obtaining a copy
+% The MIT License (MIT)
+%
+% Copyright (c) <2014> <Paul Kendrick>
+% Copyright (c) <2016> <David Hasenfratz>
+%
+% Permission is hereby granted, free of charge, to any person obtaining a copy
 % of this software and associated documentation files (the "Software"), to deal
 % in the Software without restriction, including without limitation the rights
 % to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 % copies of the Software, and to permit persons to whom the Software is
 % furnished to do so, subject to the following conditions:
-% 
+%
 % The above copyright notice and this permission notice shall be included in
 % all copies or substantial portions of the Software.
-% 
+%
 % THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 % IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 % FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -50,7 +20,15 @@ function []=extractDecTreeStruct(b,classesunique,treebag,bags,prefix)
 % LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 % OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 % THE SOFTWARE.
-% */
+
+function []=extractDecTreeStruct(b,classesunique,treebag,bags)
+% 	This function takes a treebagger class, or decision tree class, and outputs a text file with all
+%	The information required to export the treebagger / classification functions
+%   inputs
+%	b : Treebagg class structure, or or classification tree structure
+%	classesunique : list of unique class labels (numerical)
+%	treebag : 0 for classification tree, 1 for treebagger
+%	bags : number of bags
 
 uniqueclasses=sort(classesunique,'ascend');
 % meas,species
@@ -153,48 +131,135 @@ storeBranchTmpVal(storeBranchTmpVecI==0)=nan;
 storeBranchTmpL(storeBranchTmpVecI==0)=nan; % 1 is less than  ... 0 is greater or equal to
 storeBranchTmpVecI(storeBranchTmpVecI==0)=nan;
 %% % Decision tree code
-filename=sprintf('%s_bag_%i.txt',prefix,bagi);
 
- DecTreeCwrite(bags,branches,storeBranchLength,storeBranchTmpL,storeBranchTmpVal,storeBranchTmpVecI,Class,filename,uniqueclasses);
-
-for ii=1:length(meas)
-x=meas(ii,:);
-classout=0;
-clear test
- cl=DecTree(x,branches,storeBranchLength,storeBranchTmpL,storeBranchTmpVal,storeBranchTmpVecI,Class);
-
-class_out(bagi,ii)=classesunique(find(classesunique==str2num(cl{1})));
-% find(strcmp(mat2str(classesunique),(cl{1})));
+ all_bags{bagi} = bags;
+ all_branches{bagi} = branches;
+ all_storeBranchLength{bagi} = storeBranchLength;
+ all_storeBranchTmpL{bagi} = storeBranchTmpL;
+ all_storeBranchTmpVal{bagi} = storeBranchTmpVal;
+ all_storeBranchTmpVecI{bagi} = storeBranchTmpVecI;
+ all_Class{bagi} = Class;
 
 end
 
+fid=fopen('decTreeConstants.h', 'w');
+
+fprintf(fid,'#ifndef DECTREECONSTANTS_h\n');
+fprintf(fid,'#define DECTREECONSTANTS_h\n\n');
+fprintf(fid,'const int NO_CLASSES = %i;\n', length(uniqueclasses));
+fprintf(fid,'const int NO_BAGS = %i;\n', bags);
+
+fprintf(fid,'\nconst int NO_BRANCHES[%i] = {', bags);
+for bagi=1:numel(all_bags)
+    if bagi < numel(all_bags)
+        fprintf(fid,'%i,', all_branches{bagi});
+    else
+        fprintf(fid,'%i};\n', all_branches{bagi});
+    end
 end
-%%  test classifier
 
-% clear count vote
-% for datai=1:length(meas)
-% for classi=1:length(classesunique)
-%     count(datai,classi)=sum(classesunique(classi)==class_out(:,datai));
-% end
-% [ null Imax]=max(count(datai,:));
-% [null Isorted]=sort(count(datai,:));
-% 
-% if sum(count(datai,Imax)==count(datai,Isorted))>1
-% 
-%     I=find(count(datai,Imax)==count(datai,:));
-%     classesunique(  I(ceil(rand()*length(I)))  );
-%     
-%     
-%      vote(datai)=min(classesunique(I));
-% %       vote(datai)=    classesunique(  I(ceil(rand()*length(I)))  );
-% else
-%     vote(datai)=classesunique(Imax);
-% end
-%     
-% end
-% numericlabels=species;
+fprintf(fid,'\nconst int BRANCH_LENGTHS[%i][%i] = {\n', bags, max(cell2mat(all_branches)));
+for bagi=1:numel(all_bags)
+    fprintf(fid,'  {');
+    for i=1:numel(all_storeBranchLength{bagi})
+        if i < numel(all_storeBranchLength{bagi})
+            fprintf(fid,'%i, ', all_storeBranchLength{bagi}(i));
+        else
+            if bagi < numel(all_bags)
+                fprintf(fid,'%i},\n', all_storeBranchLength{bagi}(i));
+            else
+                fprintf(fid,'%i}};\n', all_storeBranchLength{bagi}(i));
+            end
+        end
+    end
+end
 
-% sum(vote==numericlabels)/length(numericlabels)
-% 
-%  trueVote=predict(b,meas);  trueVote=str2num(cell2mat(trueVote));             
-%  sum(trueVote==numericlabels')/length(numericlabels)
+fprintf(fid,'\nconst int BRANCH_LOGIC[%i][%i][%i] = {\n', bags, max(cell2mat(all_branches)), max(cell2mat(all_storeBranchLength)));
+for bagi=1:numel(all_bags)
+    fprintf(fid,'  {\n');
+    for i=1:numel(all_storeBranchLength{bagi})
+        fprintf(fid,'    {');
+        for j=1:all_storeBranchLength{bagi}(i)
+            if j < all_storeBranchLength{bagi}(i)
+                fprintf(fid,'%i, ', all_storeBranchTmpL{bagi}(i,j));
+            else
+                if i < numel(all_storeBranchLength{bagi})
+                    fprintf(fid,'%i},\n', all_storeBranchTmpL{bagi}(i,j));
+                else
+                    if bagi < numel(all_bags)
+                        fprintf(fid,'%i}},\n', all_storeBranchTmpL{bagi}(i,j));
+                    else
+                        fprintf(fid,'%i}}};\n', all_storeBranchTmpL{bagi}(i,j));
+                    end
+                end
+            end
+        end
+    end
+end
+
+fprintf(fid,'\nconst float BRANCH_VALUES[%i][%i][%i] = {\n', bags, max(cell2mat(all_branches)), max(cell2mat(all_storeBranchLength)));
+for bagi=1:numel(all_bags)
+    fprintf(fid,'  {\n');
+    for i=1:numel(all_storeBranchLength{bagi})
+        fprintf(fid,'    {');
+        for j=1:all_storeBranchLength{bagi}(i)
+            if j < all_storeBranchLength{bagi}(i)
+                fprintf(fid,'%f, ', all_storeBranchTmpVal{bagi}(i,j));
+            else
+                if i < numel(all_storeBranchLength{bagi})
+                    fprintf(fid,'%f},\n', all_storeBranchTmpVal{bagi}(i,j));
+                else
+                    if bagi < numel(all_bags)
+                        fprintf(fid,'%f}},\n', all_storeBranchTmpVal{bagi}(i,j));
+                    else
+                        fprintf(fid,'%f}}};\n', all_storeBranchTmpVal{bagi}(i,j));
+                    end
+                end
+            end
+        end
+    end
+end
+
+fprintf(fid,'\nconst int BRANCH_VECTOR_INDEX[%i][%i][%i] = {\n', bags, max(cell2mat(all_branches)), max(cell2mat(all_storeBranchLength)));
+for bagi=1:numel(all_bags)
+    fprintf(fid,'  {\n');
+    for i=1:numel(all_storeBranchLength{bagi})
+        fprintf(fid,'    {');
+        for j=1:all_storeBranchLength{bagi}(i)
+            if j < all_storeBranchLength{bagi}(i)
+                fprintf(fid,'%i, ', all_storeBranchTmpVecI{bagi}(i,j));
+            else
+                if i < numel(all_storeBranchLength{bagi})
+                    fprintf(fid,'%i},\n', all_storeBranchTmpVecI{bagi}(i,j));
+                else
+                    if bagi < numel(all_bags)
+                        fprintf(fid,'%i}},\n', all_storeBranchTmpVecI{bagi}(i,j));
+                    else
+                        fprintf(fid,'%i}}};\n', all_storeBranchTmpVecI{bagi}(i,j));
+                    end
+                end
+            end
+        end
+    end
+end
+
+fprintf(fid,'\nconst int CLASS_LABELS[%i][%i] = {\n', bags, max(cell2mat(all_branches)));
+for bagi=1:numel(all_bags)
+    fprintf(fid,'  {');
+    for i=1:numel(all_storeBranchLength{bagi})
+        if i < numel(all_storeBranchLength{bagi})
+            fprintf(fid,'%s, ', cell2mat(all_Class{bagi}(i)));
+        else
+            if bagi < numel(all_bags)
+                fprintf(fid,'%s},\n', cell2mat(all_Class{bagi}(i)));
+            else
+                fprintf(fid,'%s}};\n', cell2mat(all_Class{bagi}(i)));
+            end
+        end
+    end
+end
+fprintf(fid,'\n// THESE TWO VARIALBES NEED TO BE COPIED TO THE HEADER FILE DecisionTreeClass.hpp\n');
+fprintf(fid,'//float test[%i][%i][%i];\n', bags, max(cell2mat(all_branches)), max(cell2mat(all_storeBranchLength)));
+fprintf(fid,'//float result[%i][%i];\n', bags, max(cell2mat(all_branches)));
+
+fprintf(fid,'\n#endif\n');

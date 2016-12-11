@@ -1,7 +1,8 @@
-/* 
+/*
 The MIT License (MIT)
 
 Copyright (c) <2014> <Paul Kendrick>
+Copyright (c) <2016> <David Hasenfratz>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -20,7 +21,7 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
- */
+*/
 
 #ifndef DECISIONTREECLASS_HPP
 #define	DECISIONTREECLASS_HPP
@@ -30,24 +31,13 @@ THE SOFTWARE.
 #include <iostream>
 #include <time.h>
 #include <stdlib.h>
+#include "decTreeConstants.h"
 
 class DTree{
-private:
-    char * fileprefix;
-    int filenameLen;
-    int  noBags;
-     int  *noBranches;
-     int  *maxBrancheLen;
-     int  **branchLengths;
-     int***branchLogic;
-     float  ***branchValues;
-     int  ***branchVectI;
-     int  **classLabels;
-     int  noClasses;
-     int ***test;
-     int **result;
+  private:
+    float test[20][13][7];
+    float result[20][13];
   public:
-   void readTextFilesTrees(char * fileprefix);
    int decisionTreeFun(float *x);
 };
 
