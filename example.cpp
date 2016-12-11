@@ -22,11 +22,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-#include <iostream>
-/*#include <fstream>
-#include <string>
-#include <cmath>
-#include <signal.h>*/
 #include "DecisionTreeClass.hpp"
 
 using namespace std;
