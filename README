@@ -6,8 +6,8 @@ file decTreeConstants.h containing all the branch information. This header
 file is used by the attached C++ class to make decisions based on presented
 features in deployed applications.
 
-This is useful for deploying code developed in Matlab into other embedded
-applications where Matlab is not available and no input files can read. 
+This is useful for deploying code developed in Matlab into embedded
+applications where Matlab is not available and no input files can be read.
 
 Usage
 --------------------------------------------------------------------------------

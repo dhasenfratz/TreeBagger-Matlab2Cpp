@@ -152,7 +152,7 @@ fprintf(fid,'const int NO_BAGS = %i;\n', bags);
 fprintf(fid,'\nconst int NO_BRANCHES[%i] = {', bags);
 for bagi=1:numel(all_bags)
     if bagi < numel(all_bags)
-        fprintf(fid,'%i,', all_branches{bagi});
+        fprintf(fid,'%i, ', all_branches{bagi});
     else
         fprintf(fid,'%i};\n', all_branches{bagi});
     end

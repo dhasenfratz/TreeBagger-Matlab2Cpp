@@ -35,8 +35,8 @@ THE SOFTWARE.
 
 class DTree{
   private:
-    float test[20][14][9];
-    float result[20][14];
+    float test[20][13][7];
+    float result[20][13];
   public:
    int decisionTreeFun(float *x);
 };
