@@ -26,11 +26,7 @@ THE SOFTWARE.
 #ifndef DECISIONTREECLASS_HPP
 #define	DECISIONTREECLASS_HPP
 
-#include <stdio.h>
-#include <stdbool.h>
 #include <iostream>
-#include <time.h>
-#include <stdlib.h>
 #include "decTreeConstants.h"
 
 class DTree{
