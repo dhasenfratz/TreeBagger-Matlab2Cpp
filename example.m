@@ -21,19 +21,22 @@
 % OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 % THE SOFTWARE.
 
-num_bags=20;
+% make results repeatable
+rng(1)
+
+% fisheriris data set:
+%  - meas: Matrix of input variables
+%  - species: vector of species
 load fisheriris
+num_bags=20;
 
-% if lables are strings
-strunique=unique(species);
-for i=1:length(strunique)
-    I=strcmp(strunique{i},species);
-    speciesnum(I)=i;
-end
-classesunique=unique(speciesnum);
-uniqueclasses=sort(classesunique);
-species=speciesnum;
+% create numerical class labels
+species_class(find(strcmp(species, 'setosa'))) = 1;
+species_class(find(strcmp(species, 'versicolor'))) = 2;
+species_class(find(strcmp(species, 'virginica'))) = 3;
 
-b = TreeBagger(num_bags, meas, species);
+% create decision trees
+B = TreeBagger(num_bags, meas, species_class);
 
-extractDecTreeStruct(b, classesunique, 1, num_bags);
+% extract decision trees to the header file decTreeConstants.h
+extractDecTreeStruct(B, unique(species_class), 1, num_bags);

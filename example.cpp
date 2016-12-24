@@ -30,12 +30,12 @@ int main(int argc, char* argv[]) {
 
   DTree tree;
 
-  float x1[4] = {5.7f, 2.8f, 4.1f, 1.3f};
-  int prediction = tree.decisionTreeFun(x1);
+  float input1[4] = {5.7f, 2.8f, 4.1f, 1.3f};
+  int prediction = tree.decisionTreeFun(input1);
   cout << "Predicted species: " << prediction << endl;
 
-  float x2[4] = {5.1f, 3.5f, 1.4f, 0.2f};
-  prediction = tree.decisionTreeFun(x2);
+  float input2[4] = {5.1f, 3.5f, 1.4f, 0.2f};
+  prediction = tree.decisionTreeFun(input2);
   cout << "Predicted species: " << prediction << endl;
 
   return 0;

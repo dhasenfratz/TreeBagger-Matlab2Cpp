@@ -31,10 +31,10 @@ THE SOFTWARE.
 
 class DTree{
   private:
-    float test[20][13][7];
-    float result[20][13];
+    float test[20][14][7];
+    float result[20][14];
   public:
-   int decisionTreeFun(float *x);
+    int decisionTreeFun(float *x);
 };
 
 
