@@ -265,3 +265,4 @@ fprintf(fid,'//float result[%i][%i];\n', bags, max(cell2mat(all_branches)));
 fprintf(fid,'<------------------------------------>\n');
 
 fprintf(fid,'\n#endif\n');
+fclose(fid);
