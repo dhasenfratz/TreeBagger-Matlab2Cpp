@@ -142,7 +142,7 @@ storeBranchTmpVecI(storeBranchTmpVecI==0)=nan;
 
 end
 
-fid=fopen('decTreeConstants.h', 'w');
+fid=fopen('../cpp/decTreeConstants.h', 'w');
 
 fprintf(fid,'#ifndef DECTREECONSTANTS_h\n');
 fprintf(fid,'#define DECTREECONSTANTS_h\n\n');
