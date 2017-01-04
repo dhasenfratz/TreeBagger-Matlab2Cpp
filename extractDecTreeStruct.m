@@ -1,7 +1,7 @@
 % The MIT License (MIT)
 %
-% Copyright (c) <2014> <Paul Kendrick>
-% Copyright (c) <2016> <David Hasenfratz>
+% Copyright (c) 2014 Paul Kendrick
+% Copyright (c) 2016 David Hasenfratz
 %
 % Permission is hereby granted, free of charge, to any person obtaining a copy
 % of this software and associated documentation files (the "Software"), to deal
@@ -35,26 +35,26 @@ uniqueclasses=sort(classesunique,'ascend');
 clear class class_out
 for bagi=1:bags
     if treebag==1
-            [T] = evalc('view(b.Trees{bagi})');    
+            [T] = evalc('view(b.Trees{bagi})');
     else
-        [T] = evalc('view(b)');    
+        [T] = evalc('view(b)');
     end
 
 C=textscan(T,'%s','Delimiter','\n');
 clear C1;
 for i=3:length(C{1})-1
-    
+
     C1{i-2}=C{1}{i};
 end
 
 
 i=1;
 TreeMat=[];
-clear TreeDecisions 
+clear TreeDecisions
 Cline=textscan(C1{i},'%s','Delimiter',' ');
 Cline=Cline{1};
 n=1;%str2num(Cline{7})
-% first find every path through tree   
+% first find every path through tree
 %%  Locate ends of branches
 clear ends
 for i=1:length(C1)
@@ -63,7 +63,7 @@ end
 branches=sum(ends); %branches
 
 
-% log the node paths for each non-ned of branch path 
+% log the node paths for each non-ned of branch path
 
 I=find(ends==0);
 clear nodeVecI nodeVecI nodeLogicVal nodepaths
@@ -100,14 +100,14 @@ for i=1:sum(ends)
     BranchTmpVal=[];
     foundStart=0;
     nodes=[];
-    
-    
-    
+
+
+
     while foundStart==0
-        
+
          n1=find(nodepaths==node_next);[n,J] = ind2sub(size(nodepaths),n1);
-        
-        
+
+
         nodes=[nodes n];
         BranchTmpL=[BranchTmpL J==1];
         BranchTmpVecI=[BranchTmpVecI nodeVecI(n)];
@@ -125,7 +125,7 @@ for i=1:sum(ends)
     storeBranchTmpVal(i,1:N)=fliplr(BranchTmpVal);
     storeBranchTmpL(i,1:N)=fliplr(BranchTmpL);
     storeBranchLength(i)=length(BranchTmpVal);
-    
+
 end
 storeBranchTmpVal(storeBranchTmpVecI==0)=nan;
 storeBranchTmpL(storeBranchTmpVecI==0)=nan; % 1 is less than  ... 0 is greater or equal to

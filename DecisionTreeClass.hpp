@@ -1,8 +1,8 @@
 /*
 The MIT License (MIT)
 
-Copyright (c) <2014> <Paul Kendrick>
-Copyright (c) <2016> <David Hasenfratz>
+Copyright (c) 2014 Paul Kendrick
+Copyright (c) 2016 David Hasenfratz
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -39,4 +39,3 @@ class DTree{
 
 
 #endif	/* DECISIONTREECLASS_HPP */
-

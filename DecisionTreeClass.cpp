@@ -1,8 +1,8 @@
 /*
 The MIT License (MIT)
 
-Copyright (c) <2014> <Paul Kendrick>
-Copyright (c) <2016> <David Hasenfratz>
+Copyright (c) 2014 Paul Kendrick
+Copyright (c) 2016 David Hasenfratz
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -27,7 +27,7 @@ THE SOFTWARE.
 
 
 int DTree::decisionTreeFun(float *x) {
-    
+
     int out[NO_BAGS];
     for (int bagi = 0; bagi < NO_BAGS; bagi++)
         out[bagi] = 0;
@@ -59,11 +59,11 @@ int DTree::decisionTreeFun(float *x) {
             }
         }
     }
-   
+
     // now provide the class estimate that is most popular
     int  count[NO_CLASSES];
     int ClassTest[NO_CLASSES];
-    
+
     for (int j = 0; j < NO_CLASSES; j++)
         ClassTest[j] = j;
     for (int i = 0; i < NO_CLASSES; i++)
@@ -86,7 +86,7 @@ int DTree::decisionTreeFun(float *x) {
             max = count[j];
         }
     }
-    
+
     int countave=0;
     for (int j = 1; j < NO_CLASSES; j++) {
         if (count[j] == max) {
@@ -106,6 +106,6 @@ int DTree::decisionTreeFun(float *x) {
         in=in - rand() % 2;
         output=storeMaxclasses[in];
     }
-    
+
     return output;
 }
